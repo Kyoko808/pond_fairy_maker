@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沼の妖精AI生成図鑑</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>沼の妖精 生成図鑑</h1>
+            <p>ボタンを押して、未知の妖精を観測する</p>
+        </header>
+        <main>
+            <button id="generate-btn">新たな妖精を生成</button>
+            <div id="fairy-card" class="hidden">
+                <h2 id="fairy-name"></h2>
+                <p class="meta"><strong>別名:</strong> <span id="fairy-alias"></span></p>
+                <div class="section">
+                    <h3>特徴</h3>
+                    <p id="fairy-feature"></p>
+                </div>
+                <div class="section">
+                    <h3>行動</h3>
+                    <p id="fairy-behavior"></p>
+                </div>
+                <div class="section">
+                    <h3>出現場所</h3>
+                    <p id="fairy-location"></p>
+                </div>
+                <div class="section">
+                    <h3>象徴性</h3>
+                    <p id="fairy-symbolism"></p>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>沼の妖精AI生成図鑑</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

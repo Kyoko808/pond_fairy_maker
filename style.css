@@ -1,0 +1,109 @@
+/* General Body Styles */
+body {
+    font-family: 'Helvetica Neue', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+    background-color: #1a1a1a; /* Dark background */
+    color: #e0e0e0; /* Light gray text */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Main Container */
+.container {
+    max-width: 600px;
+    width: 100%;
+    background-color: #2b2b2b; /* Slightly lighter dark shade */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    padding: 30px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    color: #00ffff; /* Cyan color for title */
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+header p {
+    font-size: 1.1em;
+    color: #a0a0a0; /* Lighter gray for subtitle */
+    margin-bottom: 30px;
+}
+
+/* Generate Button */
+#generate-btn {
+    background-color: #00ffff;
+    color: #1a1a1a;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+#generate-btn:hover {
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+/* Fairy Card */
+#fairy-card {
+    background-color: #1f1f1f;
+    border: 1px solid #005f5f;
+    border-radius: 8px;
+    padding: 25px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+#fairy-card.hidden {
+    display: none;
+}
+
+#fairy-name {
+    color: #00ffff;
+    font-size: 2em;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.meta {
+    text-align: center;
+    color: #a0a0a0;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h3 {
+    color: #00ffff;
+    border-bottom: 2px solid #008f8f;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Footer */
+footer {
+    margin-top: 30px;
+    color: #666;
+    font-size: 0.9em;
+}
