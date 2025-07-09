@@ -3,6 +3,7 @@ import google.generativeai as genai
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import json
+import random
 
 app = Flask(__name__, static_folder='.')
 CORS(app) # Enable CORS for all routes
@@ -64,16 +65,33 @@ def list_gemini_models():
 @app.route('/generate_fairy_text', methods=['POST'])
 def generate_fairy_text():
     try:
+        # Define a list of diverse themes to ensure variety
+        themes = [
+            "忘れられた書斎の埃", "古い機械の心臓部", "真夜中のキッチンの静寂", 
+            "複雑な数式の中に宿る論理", "夏の終わりの夕暮れ", "捨てられたおもちゃの記憶",
+            "海底に沈んだ都市の響き", "プログラムのバグから生まれた歪み", "雨上がりのアスファルトの匂い",
+            "誰かの夢の残り香", "古い地図のインク"
+        ]
+        # Pick a random theme for this request
+        selected_theme = random.choice(themes)
+
         model = genai.GenerativeModel('models/gemini-1.5-flash-latest')
-        prompt = """
-        Generate a unique profile for a "swamp fairy" (沼の妖精).
-        The profile should include:
-        - A creative Japanese name (e.g., 靄の精, 思ひ雫).
-        - Its Katakana reading (e.g., モヤノセイ, オモイシズク).
-        - A corresponding English alias, written in Katakana (e.g., ヘイズ・スプライト, オモイシズク).
+        
+        # The prompt now dynamically includes the random theme
+        prompt = f"""
+        **Theme: "{selected_theme}"**
+
+        Based on the theme above, generate a unique profile for a fairy.
+        The fairy's name and characteristics should be directly inspired by the provided theme.
+        **Do not use common, generic words like "葦 (reed)" or "沼 (swamp)" unless the theme directly implies it.**
+
+        The profile must include:
+        - A creative Japanese name.
+        - Its Katakana reading.
+        - A corresponding English alias, written in Katakana.
         - A unique physical feature.
         - A characteristic behavior.
-        - A specific appearance location (not necessarily a physical swamp, but a "spiritual swamp" like a deep hobby, a forgotten place, etc.).
+        - A specific appearance location.
         - A symbolic meaning.
 
         Format the output strictly as follows, with each field on a new line:
@@ -84,16 +102,12 @@ def generate_fairy_text():
         Behavior: [Behavior description]
         Location: [Location description]
         Symbolism: [Symbolism description]
-
-        Example:
-        Name: 思ひ雫
-        Alias: オモイシズク
-        Feature: 深い藍色を帯びた、水滴のような形をした半透明の生命体。
-        Behavior: 何かに深く没頭している人間（＝沼の主）の傍に、いつの間にか現れる。
-        Location: 深夜の書斎、モニターの光だけが灯るPCデスク周り。
-        Symbolism: 「創造的な没入」と「尽きることのない探求心」。
         """
-        response = model.generate_content(prompt)
+
+        # Set temperature to 1.0 for more creative and less repetitive responses
+        generation_config = genai.types.GenerationConfig(temperature=1.0)
+        
+        response = model.generate_content(prompt, generation_config=generation_config)
         generated_text = response.text
 
         # Parse the generated text
