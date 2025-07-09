@@ -70,20 +70,19 @@ def generate_fairy_text():
             "忘れられた書斎の埃", "古い機械の心臓部", "真夜中のキッチンの静寂", 
             "複雑な数式の中に宿る論理", "夏の終わりの夕暮れ", "捨てられたおもちゃの記憶",
             "海底に沈んだ都市の響き", "プログラムのバグから生まれた歪み", "雨上がりのアスファルトの匂い",
-            "誰かの夢の残り香", "古い地図のインク"
+            "誰かの夢の残り香", "古い地図のインク", "解読不能な古代文字", "ガラス瓶に閉じ込めた星屑"
         ]
         # Pick a random theme for this request
         selected_theme = random.choice(themes)
 
         model = genai.GenerativeModel('models/gemini-1.5-flash-latest')
         
-        # The prompt now dynamically includes the random theme
         prompt = f"""
         **Theme: "{selected_theme}"**
 
         Based on the theme above, generate a unique profile for a fairy.
-        The fairy's name and characteristics should be directly inspired by the provided theme.
-        **Do not use common, generic words like "葦 (reed)" or "沼 (swamp)" unless the theme directly implies it.**
+        The fairy's name and characteristics must be directly inspired by the provided theme.
+        **Do not use common, generic words like "葦 (reed)" or "沼 (swamp)". You must adhere to the theme.**
 
         The profile must include:
         - A creative Japanese name.
@@ -94,7 +93,7 @@ def generate_fairy_text():
         - A specific appearance location.
         - A symbolic meaning.
 
-        Format the output strictly as follows, with each field on a new line:
+        Format the output strictly as follows:
         Name: [Japanese Name]
         Reading: [Katakana Reading]
         Alias: [Katakana English Alias]
@@ -104,8 +103,7 @@ def generate_fairy_text():
         Symbolism: [Symbolism description]
         """
 
-        # Set temperature to 1.0 for more creative and less repetitive responses
-        generation_config = genai.types.GenerationConfig(temperature=1.0)
+        generation_config = genai.types.GenerationConfig(temperature=1.2, top_p=0.95)
         
         response = model.generate_content(prompt, generation_config=generation_config)
         generated_text = response.text
@@ -117,6 +115,10 @@ def generate_fairy_text():
             if ':' in line:
                 key, value = line.split(':', 1)
                 fairy_data[key.strip().lower()] = value.strip()
+        
+        # --- DEBUG: Forcibly add the theme to the symbolism for verification ---
+        original_symbolism = fairy_data.get('symbolism', '')
+        fairy_data['symbolism'] = f"（テーマ: {selected_theme}）{original_symbolism}"
 
         return jsonify(fairy_data)
 
