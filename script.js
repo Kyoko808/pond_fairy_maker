@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update fairy card with generated text
             document.getElementById('fairy-name').textContent = fairyData.name || '不明な妖精';
-            document.getElementById('fairy-alias').textContent = fairyData.alias || '不明';
+            document.getElementById('fairy-reading').textContent = fairyData.reading || '不明';
             document.getElementById('fairy-feature').textContent = fairyData.feature || '不明';
             document.getElementById('fairy-behavior').textContent = fairyData.behavior || '不明';
             document.getElementById('fairy-location').textContent = fairyData.location || '不明';

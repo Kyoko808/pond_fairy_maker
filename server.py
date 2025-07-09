@@ -69,6 +69,7 @@ def generate_fairy_text():
         Generate a unique profile for a "swamp fairy" (沼の妖精).
         The profile should include:
         - A creative Japanese name (e.g., 靄の精, 思ひ雫).
+        - Its Katakana reading (e.g., モヤノセイ, オモイシズク).
         - A corresponding English alias, written in Katakana (e.g., ヘイズ・スプライト, オモイシズク).
         - A unique physical feature.
         - A characteristic behavior.
@@ -77,6 +78,7 @@ def generate_fairy_text():
 
         Format the output strictly as follows, with each field on a new line:
         Name: [Japanese Name]
+        Reading: [Katakana Reading]
         Alias: [Katakana English Alias]
         Feature: [Feature description]
         Behavior: [Behavior description]
