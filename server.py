@@ -104,17 +104,45 @@ def generate_fairy_text():
         response = model.generate_content(prompt, generation_config=generation_config)
         generated_text = response.text
 
-        # Parse the generated text
+        # --- パース処理をより堅牢に修正 --- 
         lines = generated_text.strip().split('\n')
-        fairy_data = {}
+        fairy_data = {
+            "name": "不明",
+            "reading": "不明",
+            "alias": "不明",
+            "feature": "不明",
+            "behavior": "不明",
+            "location": "不明",
+            "symbolism": "不明"
+        }
+
         for line in lines:
             if ':' in line:
-                key, value = line.split(':', 1)
-                fairy_data[key.strip().lower()] = value.strip()
+                try:
+                    key, value = line.split(':', 1)
+                    # キーを小文字にして、余分なスペースを削除
+                    processed_key = key.strip().lower()
+                    # 期待するキーのみを処理
+                    if processed_key in fairy_data:
+                        fairy_data[processed_key] = value.strip()
+                except Exception as e:
+                    # パースエラーが発生しても処理を続行
+                    print(f"Parsing error on line: {line} - {e}")
+
+        # --- Gemini APIが空の応答を返した場合のハンドリング --- 
+        if not any(value != "不明" for key, value in fairy_data.items()):
+            fairy_data["name"] = "妖精生成失敗"
+            fairy_data["reading"] = "エラー"
+            fairy_data["alias"] = "Error"
+            fairy_data["feature"] = "Gemini APIからの応答がありませんでした。\nプロンプトの調整が必要かもしれません。"
+            fairy_data["behavior"] = "-"
+            fairy_data["location"] = "-"
+            fairy_data["symbolism"] = "-"
 
         return jsonify(fairy_data)
 
     except Exception as e:
+        # API呼び出し自体でエラーが発生した場合
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
