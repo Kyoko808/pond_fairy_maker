@@ -84,7 +84,6 @@ def generate_fairy_text():
 
         【生成ルール】
         - **回答はすべて日本語で記述してください。**
-        - **名前の後に括弧書きでローマ字表記を追加しないでください。**
         - 「葦」や「沼」のような、お題と直接関係のない一般的な単語は避けてください。
         - 創造的で多様な表現を心がけてください。
 
@@ -134,7 +133,7 @@ def generate_fairy_text():
             fairy_data["name"] = "妖精生成失敗"
             fairy_data["reading"] = "エラー"
             fairy_data["alias"] = "Error"
-            fairy_data["feature"] = "Gemini APIからの応答がありませんでした。\nプロンプトの調整が必要かもしれません。"
+            fairy_data["feature"] = "Gemini APIからの応答がありませんでした.\nプロンプトの調整が必要かもしれません."
             fairy_data["behavior"] = "-"
             fairy_data["location"] = "-"
             fairy_data["symbolism"] = "-"
