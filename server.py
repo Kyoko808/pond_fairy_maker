@@ -77,30 +77,27 @@ def generate_fairy_text():
 
         model = genai.GenerativeModel('models/gemini-1.5-flash-latest')
         
+        # Prompt is now entirely in Japanese with strict instructions.
         prompt = f"""
-        **Theme: "{selected_theme}"**
+        **お題：「{selected_theme}」**
 
-        Based on the theme above, generate a unique profile for a fairy.
-        The fairy's name and characteristics must be directly inspired by the provided theme.
-        **Do not use common, generic words like "葦 (reed)" or "沼 (swamp)". You must adhere to the theme.**
+        上記のお題に完全に基づいて、ユニークな妖精のプロフィールを生成してください。
+        妖精の名前と特徴は、必ず指定されたお題から着想を得てください。
 
-        The profile must include:
-        - A creative Japanese name.
-        - Its Katakana reading.
-        - A corresponding English alias, written in Katakana.
-        - A unique physical feature.
-        - A characteristic behavior.
-        - A specific appearance location.
-        - A symbolic meaning.
+        【重要事項】
+        - **回答はすべて日本語で記述してください。**
+        - **名前の後に括弧書きでローマ字表記を追加しないでください。**
+        - 「葦」や「沼」のような、お題と無関係なありふれた単語は絶対に使わないでください。
 
-        Format the output strictly as follows:
-        Name: [Japanese Name]
-        Reading: [Katakana Reading]
-        Alias: [Katakana English Alias]
-        Feature: [Feature description]
-        Behavior: [Behavior description]
-        Location: [Location description]
-        Symbolism: [Symbolism description]
+        以下のフォーマットに厳密に従って、各項目を改行して出力してください。
+
+        名前： [創造的な日本語名]
+        読み： [カタカナでの読み]
+        別名： [英語の別名をカタカナで]
+        特徴： [ユニークな物理的特徴]
+        習性： [特徴的な習性]
+        出現場所： [具体的な出現場所]
+        象徴： [象徴的な意味]
         """
 
         generation_config = genai.types.GenerationConfig(temperature=1.2, top_p=0.95)
@@ -115,10 +112,6 @@ def generate_fairy_text():
             if ':' in line:
                 key, value = line.split(':', 1)
                 fairy_data[key.strip().lower()] = value.strip()
-        
-        # --- DEBUG: Forcibly add the theme to the symbolism for verification ---
-        original_symbolism = fairy_data.get('symbolism', '')
-        fairy_data['symbolism'] = f"（テーマ: {selected_theme}）{original_symbolism}"
 
         return jsonify(fairy_data)
 
