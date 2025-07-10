@@ -67,10 +67,8 @@ def generate_fairy_text():
     try:
         # Define a list of diverse themes to ensure variety
         themes = [
-            "忘れられた書斎の埃", "古い機械の心臓部", "真夜中のキッチンの静寂", 
-            "複雑な数式の中に宿る論理", "夏の終わりの夕暮れ", "捨てられたおもちゃの記憶",
-            "海底に沈んだ都市の響き", "プログラムのバグから生まれた歪み", "雨上がりのアスファルトの匂い",
-            "誰かの夢の残り香", "古い地図のインク", "解読不能な古代文字", "ガラス瓶に閉じ込めた星屑"
+            "自然界の神秘", "都市の片隅", "人間の感情", "時間の流れ", "日常の魔法",
+            "夢と幻想", "科学と技術", "物語の断片", "宇宙の広がり", "生命の循環"
         ]
         # Pick a random theme for this request
         selected_theme = random.choice(themes)
