@@ -1,26 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const fairyCard = document.getElementById('fairy-card');
+    const serverUrl = 'http://127.0.0.1:8000'; // Define server URL for local development
 
     generateBtn.addEventListener('click', async () => {
-        // Hide card and show loading indicator (optional)
         fairyCard.classList.add('hidden');
-        // You might want to add a loading spinner here
+        // Optional: Add a loading spinner here
 
         try {
             // Fetch fairy text from backend
-            const textResponse = await fetch('/generate_fairy_text', {
+            const textResponse = await fetch(`${serverUrl}/generate_fairy_text`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({}), // No specific input needed for text generation
+                body: JSON.stringify({}),
             });
             const fairyData = await textResponse.json();
 
             if (fairyData.error) {
+                // Provide more detailed error feedback to the user
+                let userMessage = `妖精の生成中にエラーが発生しました。\n\n詳細: ${fairyData.error}`;
+                if (fairyData.error.includes("GEMINI_API_KEY")) {
+                    userMessage = "APIキーが設定されていないか、無効です。サーバー側の設定を確認してください。";
+                }
                 console.error('Error generating fairy text:', fairyData.error);
-                alert('妖精のテキスト生成中にエラーが発生しました: ' + fairyData.error);
+                alert(userMessage);
                 return;
             }
 
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Generate image (using the generated fairy name for the prompt)
             const imagePrompt = `A melancholic swamp fairy named ${fairyData.name || 'Mysterious Fairy'} stands beside a misty marsh under twilight. The atmosphere is eerie and dreamy, with whimsical, surreal, gothic, and antique elements, in the style of Mark Ryden. Lighting is soft and sepia-toned, evoking a mysterious fairy tale.`;
-            const imageResponse = await fetch('/generate_image', {
+            const imageResponse = await fetch(`${serverUrl}/generate_image`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('An unexpected error occurred:', error);
-            alert('予期せぬエラーが発生しました。コンソールを確認してください。');
+            alert('サーバーへの接続に失敗しました。サーバーが起動しているか、URLが正しいか確認してください。');
         }
     });
 });
