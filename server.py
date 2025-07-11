@@ -98,42 +98,39 @@ def generate_fairy_text():
         象徴： [象徴的な意味]
         """
 
-        generation_config = genai.types.GenerationConfig(temperature=1.2, top_p=0.95)
+        # Lower temperature for more predictable, structured output
+        generation_config = genai.types.GenerationConfig(temperature=0.9, top_p=0.95)
         
         response = model.generate_content(prompt, generation_config=generation_config)
         generated_text = response.text
-
-        # --- パース処理をより堅牢に修正 --- 
-        lines = generated_text.strip().split('\n')
         fairy_data = {
-            "name": "不明",
-            "reading": "不明",
-            "alias": "不明",
-            "feature": "不明",
-            "behavior": "不明",
-            "location": "不明",
-            "symbolism": "不明"
+            "name": "不明", "reading": "不明", "alias": "不明",
+            "feature": "不明", "behavior": "不明", "location": "不明", "symbolism": "不明"
+        }
+        
+        # Map Japanese keys from the prompt to English keys in the dictionary
+        key_map = {
+            "名前": "name", "読み": "reading", "別名": "alias",
+            "特徴": "feature", "習性": "behavior", "出現場所": "location", "象徴": "symbolism"
         }
 
+        lines = generated_text.strip().split('\n')
         for line in lines:
-            if ':' in line:
+            if '：' in line: # Use full-width colon for splitting
                 try:
-                    key, value = line.split(':', 1)
-                    # キーを小文字にして、余分なスペースを削除
-                    processed_key = key.strip().lower()
-                    # 期待するキーのみを処理
-                    if processed_key in fairy_data:
-                        fairy_data[processed_key] = value.strip()
-                except Exception as e:
-                    # パースエラーが発生しても処理を続行
-                    print(f"Parsing error on line: {line} - {e}")
+                    key, value = line.split('：', 1)
+                    dict_key = key_map.get(key.strip())
+                    if dict_key:
+                        fairy_data[dict_key] = value.strip()
+                except ValueError:
+                    print(f"Could not parse line: {line}")
 
-        # --- Gemini APIが空の応答を返した場合のハンドリング --- 
-        if not any(value != "不明" for key, value in fairy_data.items()):
+        # --- Handle cases where the API returns an empty or malformed response ---
+        if fairy_data["name"] == "不明":
             fairy_data["name"] = "妖精生成失敗"
             fairy_data["reading"] = "エラー"
             fairy_data["alias"] = "Error"
-            fairy_data["feature"] = "Gemini APIからの応答がありませんでした.\nプロンプトの調整が必要かもしれません."
+            fairy_data["feature"] = "Gemini APIからの応答が不完全、または空でした。プロンプトの調整が必要かもしれません。"
             fairy_data["behavior"] = "-"
             fairy_data["location"] = "-"
             fairy_data["symbolism"] = "-"
@@ -141,8 +138,15 @@ def generate_fairy_text():
         return jsonify(fairy_data)
 
     except Exception as e:
-        # API呼び出し自体でエラーが発生した場合
-        return jsonify({'error': str(e)}), 500
+        # --- Provide more specific error feedback to the frontend ---
+        error_message = str(e)
+        if "API key not valid" in error_message or "PERMISSION_DENIED" in error_message:
+            error_message = "Gemini APIキーが無効か、設定されていません。環境変数 `GEMINI_API_KEY` を確認してください。"
+        else:
+            error_message = f"サーバーで予期せぬエラーが発生しました: {error_message}"
+        
+        print(f"Error in /generate_fairy_text: {error_message}")
+        return jsonify({'error': error_message}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
