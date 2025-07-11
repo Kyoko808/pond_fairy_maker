@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const fairyCard = document.getElementById('fairy-card');
-    const serverUrl = 'http://127.0.0.1:8000'; // Define server URL for local development
 
     generateBtn.addEventListener('click', async () => {
         fairyCard.classList.add('hidden');
         // Optional: Add a loading spinner here
 
         try {
-            // Fetch fairy text from backend
-            const textResponse = await fetch(`${serverUrl}/generate_fairy_text`, {
+            // Fetch fairy text from backend using a relative path for production
+            const textResponse = await fetch('/generate_fairy_text', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Generate image (using the generated fairy name for the prompt)
             const imagePrompt = `A melancholic swamp fairy named ${fairyData.name || 'Mysterious Fairy'} stands beside a misty marsh under twilight. The atmosphere is eerie and dreamy, with whimsical, surreal, gothic, and antique elements, in the style of Mark Ryden. Lighting is soft and sepia-toned, evoking a mysterious fairy tale.`;
-            const imageResponse = await fetch(`${serverUrl}/generate_image`, {
+            const imageResponse = await fetch('/generate_image', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
