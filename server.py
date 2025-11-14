@@ -4,6 +4,9 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import json
 import random
+from dotenv import load_dotenv
+
+load_dotenv() # .envファイルから環境変数を読み込む
 
 app = Flask(__name__, static_folder='.')
 CORS(app) # Enable CORS for all routes
