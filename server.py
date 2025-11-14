@@ -73,7 +73,7 @@ def generate_fairy_text():
         # Pick a random theme for this request
         selected_theme = random.choice(themes)
 
-        model = genai.GenerativeModel('models/gemini-1.5-flash-latest')
+        model = genai.GenerativeModel('models/gemini-flash-latest')
         
         # Prompt is now entirely in Japanese with strict instructions.
         prompt = f"""
@@ -149,4 +149,4 @@ def generate_fairy_text():
         return jsonify({'error': error_message}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8080)
